@@ -26,3 +26,6 @@ create topic in kafka
 docker exec -it b77adc0519fb  /bin/bash
 cd /opt/kafka/bin$ 
 ./kafka-topics.sh --create --topic zap-events-2 --bootstrap-server localhost:9092
+
+
+1912fc0b6b73c18c36edaa455670a520686e5545ed3c325539adfb70f43e912d 
