@@ -6,6 +6,7 @@ import { Kafka } from "kafkajs";
 import { parse } from "./parser";
 import { sendEmail } from "./email";
 import { sendSol } from "./solana";
+import { performOCR } from "./ocr";
 
 const prismaClient = new PrismaClient();
 const TOPIC_NAME = "zap-events"
@@ -78,6 +79,13 @@ async function main() {
             console.log(`Sending out SOL of ${amount} to address ${address}`);
             await sendSol(address, amount);
           }
+
+          if (currentAction.type.id === "ocr") {
+            const imagePath = parse((currentAction.metadata as JsonObject)?.imagePath as string, zapRunMetadata);
+            console.log(`Performing OCR on image at ${imagePath}`);
+            const text = await performOCR(imagePath);
+            console.log(`OCR result: ${text}`);
+          }
           
           // 
           await new Promise(r => setTimeout(r, 500));
@@ -111,4 +119,3 @@ async function main() {
 }
 
 main()
-
